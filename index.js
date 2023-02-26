@@ -40,7 +40,7 @@ app.post("/api/signin", async (req, res) => {
         // Token Authentication-Generate-To be included in signin
        const token = jwt.sign({ "email": email, "id": result._id }, "signin-token", { expiresIn: "1d" })
        if(!token) throw ("Token not generated")
-      
+      console.log(result)
        res.send({ "status": "success", "data":result, "token":token })
 
     }
