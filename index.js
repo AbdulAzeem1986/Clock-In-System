@@ -26,8 +26,8 @@ app.post("/api/signin", async (req, res) => {
         let password = req.body.password;
         console.log(req.body)
         const result = await Usermodel.findOne({ email: email })
-        console.log(result)
-        console.log(result.password)
+        // console.log(result)
+        // console.log(result.password)
         if (!result) throw ('username not found')
 
 
