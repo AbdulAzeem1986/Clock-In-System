@@ -30,7 +30,6 @@ app.post("/api/signin", async (req, res) => {
         // console.log(result.password)
         if (!result) throw ('username not found')
 
-
         //Comparing given password & encrypted password in DB
         const passwordValidator = bcrypt.compareSync(password, result.password)
 
@@ -42,7 +41,7 @@ app.post("/api/signin", async (req, res) => {
        if(!token) throw ("Token not generated")
        console.log(token)
       console.log(result)
-       res.send({ "status": "success", "data":result, "token":token })
+       res.json({ "status": "success", "data":result, "token":token })
 
     }
      
