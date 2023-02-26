@@ -19,37 +19,37 @@ Mongoose.connect("mongodb+srv://abdulazeem:abdulazeem86@cluster0.qch7vjx.mongodb
 
 
 //Api to Signin
-app.post("/api/signin", async(req,res)=>{
-   
-    let email= req.body.email;
-    let password = req.body.password;
+app.post("/api/signin", async (req, res) => {
 
-    let result = await Usermodel.findOne({email:email}, (err,data)=>{
-        
-        if (data.length==1) {
-                //Comparing given password & encrypted password in DB
-                const passwordValidator = bcrypt.compareSync(password,data[0].password)
-                    if(passwordValidator){
-                    
-                    //Token Authentication-Generate-To be included in signin
-                    jwt.sign({"email":email, "id":data[0]._id},"signin-token",{expiresIn:"1d"}, (err,token)=>{
-                        if (err) {
-                            res.json({"status":"failed","data":"unauthorised user"})
-                        } else {
-                            res.json({"status":"success","data":data,"token":token})
-                        }
-                    })
-                }
-                else{
-                    res.json({"status":"failed","data":"invalid password"})
-                }
-                } 
-                else 
-                {
-                  res.json({"status":"failed","data":"invalid email id"})
-                }
-            })
-         })
+    try {
+        let email = req.body.email;
+        let password = req.body.password;
+        console.log(req.body)
+        const result = await Usermodel.findOne({ email: email })
+        console.log(result)
+        console.log(result.password)
+        if (!result) throw ('username not found')
+
+
+        //Comparing given password & encrypted password in DB
+        const passwordValidator = bcrypt.compareSync(password, result.password)
+
+        console.log(passwordValidator)
+        if (!passwordValidator) throw ({ "status": "failed", "data": "invalid password" })
+
+        // Token Authentication-Generate-To be included in signin
+       const token = jwt.sign({ "email": email, "id": result._id }, "signin-token", { expiresIn: "1d" })
+       if(!token) throw ("Token not generated")
+      
+       res.send({ "status": "success", "data":result, "token":token })
+
+    }
+     
+    catch (error) {
+        console.log(error);
+        res.send(error);
+    }
+})
 
 
 //Api to add a user
