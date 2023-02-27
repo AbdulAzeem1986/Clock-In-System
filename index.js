@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const Usermodel = require("./models/Usermodel")
 const Entriesmodel = require("./models/Userentries");
 const path = require("path");
-
+// test
 
 const app = new Express;
 app.use(Express.static(path.join(__dirname,"/build")));
@@ -30,6 +30,7 @@ app.post("/api/signin", async (req, res) => {
         // console.log(result.password)
         if (!result) throw ('username not found')
 
+
         //Comparing given password & encrypted password in DB
         const passwordValidator = bcrypt.compareSync(password, result.password)
 
@@ -41,7 +42,7 @@ app.post("/api/signin", async (req, res) => {
        if(!token) throw ("Token not generated")
        console.log(token)
       console.log(result)
-       res.json({ "status": "success", "data":result, "token":token })
+       res.send({ "status": "success", "data":result, "token":token })
 
     }
      
